@@ -103,33 +103,71 @@ void button_isr(void* context) {
     }
 }
 
+void uart_wait_trdy() {
+    while ((IORD_ALTERA_AVALON_UART_STATUS(UART_BASE) & ALTERA_AVALON_UART_STATUS_TRDY_MSK) == 0) {
+        alt_putstr("");
+    }
+}
+
 void process_buffer(char* text, int uart_fd) {
     char message[UART_BUFFER_LIM];
     if (text == NULL) {
         sprintf(message, "[UART]: ERROR Buffer is NULL.\n");
+        write(uart_fd, message, strlen(message));
         return;
     }
     else if (strstr(text, "start") != NULL) { // note currently constructed with if-else, so string with multiple commands will only process the first one
         sprintf(message, "[UART]: Detected `start` command. Enabling data transmission.\n");
+        write(uart_fd, message, strlen(message));
         transmission = 1;
     }
     else if (strstr(text, "stop") != NULL) {
         sprintf(message, "[UART]: Detected `stop` command. Disabling data transmission.\n");
+        write(uart_fd, message, strlen(message));
         transmission = 0;
     }
     else if (strstr(text, "info") != NULL) {
-        sprintf(message, "[UART]: Detected `info` command.\n");
+        sprintf(message, "[UART]: Detected `info` command. ");
+        write(uart_fd, message, strlen(message));
+        uart_wait_trdy();
+        sprintf(message, "TRANSMISSION STATUS: %d | TIMER PERIOD: %d ms | ", transmission, timer_main_period_ms);
+        write(uart_fd, message, strlen(message));
+        uart_wait_trdy();
+        sprintf(message, "BAUD RATE: %d | CPU FREQ: %d Hz\n", UART_BAUD, NIOS2_CPU_FREQ);
+        write(uart_fd, message, strlen(message));
+
         // sprintf(message, "[UART]: Detected `info` command. TRANSMISSION STATUS: %d | TIMER PERIOD: %d ms | BAUD RATE: %d | CPU FREQ: %d hz\n", transmission, timer_main_period_ms, UART_BAUD, NIOS2_CPU_FREQ);
     }
     else if (strstr(text, "rate") != NULL) {
-        sprintf(message, "[UART]: Detected `rate` command.\n");
+        sprintf(message, "[UART]: Detected `rate` command. ");
+        write(uart_fd, message, strlen(message));
+        uart_wait_trdy();
+
+        int rate = 0;
+        int matched = sscanf(text, "rate %d", &rate);
+        if (matched && rate != 0) {
+            sprintf(message, "Accelerometer data sample rate set to %d Hz.\n", rate);
+            write(uart_fd, message, strlen(message));
+    
+            timer_main_period_ms = 1000 / rate;
+        }
+        else {
+            sprintf(message, "Unable to parse a valid sample rate. ");
+            write(uart_fd, message, strlen(message));
+            uart_wait_trdy();
+            sprintf(message, "Please format as `rate <number>` in Hz.\n");
+            write(uart_fd, message, strlen(message));
+        }
     }
     else if (strstr(text, "help") != NULL) {
-        sprintf(message, "[UART]: Detected `help` command.\n");
+        sprintf(message, "[UART]: Detected `help` command. ");
+        write(uart_fd, message, strlen(message));
+        uart_wait_trdy();
+        sprintf(message, "Commands: `start`, `stop`, `info`, `rate <number>`, `help`.\n");
+        write(uart_fd, message, strlen(message));
     }
     else {
     }
-    write(uart_fd, message, strlen(message));
     // alt_putstr(message);
 }
 
@@ -183,10 +221,9 @@ int main() {
                 convolve(&filter_obj, &x_read_filtered, &y_read_filtered, &z_read_filtered);
                 
                 sprintf(wr_buffer, "%d, %d, %d\n", (int)x_read_filtered, (int)y_read_filtered, (int)z_read_filtered);
-                // sprintf(wr_buffer, "%d, %d, %d\n", (int)x_read, (int)y_read, (int)z_read);
 
                 write(uart_fd, wr_buffer, strlen(wr_buffer));
-                alt_putstr(wr_buffer);
+                // alt_putstr(wr_buffer);
 
                 timer_main = 0;
             }        
