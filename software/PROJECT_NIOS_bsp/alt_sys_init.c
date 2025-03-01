@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'PROJECT_NIOS'
  * SOPC Builder design path: ../../platform-designer/PROJECT_NIOS.sopcinfo
  *
- * Generated: Thu Feb 27 03:21:10 GMT 2025
+ * Generated: Sat Mar 01 15:47:26 GMT 2025
  */
 
 /*
@@ -70,7 +70,8 @@
 
 ALTERA_NIOS2_GEN2_IRQ_INSTANCE ( CPU, cpu);
 ALTERA_AVALON_JTAG_UART_INSTANCE ( JTAG_UART, jtag_uart);
-ALTERA_AVALON_TIMER_INSTANCE ( TIMER, timer);
+ALTERA_AVALON_TIMER_INSTANCE ( TIMER_MAIN, timer_main);
+ALTERA_AVALON_TIMER_INSTANCE ( TIMER_POLL, timer_poll);
 ALTERA_AVALON_UART_INSTANCE ( UART, uart);
 ALTERA_UP_AVALON_ACCELEROMETER_SPI_INSTANCE ( ACCELEROMETER_SPI, accelerometer_spi);
 
@@ -95,7 +96,8 @@ void alt_irq_init ( const void* base )
 
 void alt_sys_init( void )
 {
-    ALTERA_AVALON_TIMER_INIT ( TIMER, timer);
+    ALTERA_AVALON_TIMER_INIT ( TIMER_MAIN, timer_main);
+    ALTERA_AVALON_TIMER_INIT ( TIMER_POLL, timer_poll);
     ALTERA_AVALON_JTAG_UART_INIT ( JTAG_UART, jtag_uart);
     ALTERA_AVALON_UART_INIT ( UART, uart);
     ALTERA_UP_AVALON_ACCELEROMETER_SPI_INIT ( ACCELEROMETER_SPI, accelerometer_spi);

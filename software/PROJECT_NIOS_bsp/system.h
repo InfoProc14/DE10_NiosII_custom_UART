@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'PROJECT_NIOS'
  * SOPC Builder design path: ../../platform-designer/PROJECT_NIOS.sopcinfo
  *
- * Generated: Thu Feb 27 03:21:10 GMT 2025
+ * Generated: Sat Mar 01 15:47:25 GMT 2025
  */
 
 /*
@@ -158,19 +158,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart"
-#define ALT_STDERR_BASE 0x410d0
+#define ALT_STDERR_BASE 0x410f0
 #define ALT_STDERR_DEV jtag_uart
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart"
-#define ALT_STDIN_BASE 0x410d0
+#define ALT_STDIN_BASE 0x410f0
 #define ALT_STDIN_DEV jtag_uart
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart"
-#define ALT_STDOUT_BASE 0x410d0
+#define ALT_STDOUT_BASE 0x410f0
 #define ALT_STDOUT_DEV jtag_uart
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -183,7 +183,7 @@
  *
  */
 
-#define ACCELEROMETER_SPI_BASE 0x410d8
+#define ACCELEROMETER_SPI_BASE 0x410f8
 #define ACCELEROMETER_SPI_IRQ 4
 #define ACCELEROMETER_SPI_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define ACCELEROMETER_SPI_NAME "/dev/accelerometer_spi"
@@ -198,7 +198,7 @@
  */
 
 #define ALT_MODULE_CLASS_button altera_avalon_pio
-#define BUTTON_BASE 0x410c0
+#define BUTTON_BASE 0x410e0
 #define BUTTON_BIT_CLEARING_EDGE_REGISTER 1
 #define BUTTON_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define BUTTON_CAPTURE 1
@@ -226,7 +226,7 @@
 
 #define ALT_INCLUDE_INSTRUCTION_RELATED_EXCEPTION_API
 #define ALT_MAX_FD 32
-#define ALT_SYS_CLK TIMER
+#define ALT_SYS_CLK TIMER_MAIN
 #define ALT_TIMESTAMP_CLK none
 
 
@@ -236,7 +236,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex0 altera_avalon_pio
-#define HEX0_BASE 0x41090
+#define HEX0_BASE 0x410b0
 #define HEX0_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX0_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX0_CAPTURE 0
@@ -263,7 +263,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex1 altera_avalon_pio
-#define HEX1_BASE 0x41080
+#define HEX1_BASE 0x410a0
 #define HEX1_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX1_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX1_CAPTURE 0
@@ -290,7 +290,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex2 altera_avalon_pio
-#define HEX2_BASE 0x41070
+#define HEX2_BASE 0x41090
 #define HEX2_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX2_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX2_CAPTURE 0
@@ -317,7 +317,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex3 altera_avalon_pio
-#define HEX3_BASE 0x41060
+#define HEX3_BASE 0x41080
 #define HEX3_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX3_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX3_CAPTURE 0
@@ -344,7 +344,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex4 altera_avalon_pio
-#define HEX4_BASE 0x41050
+#define HEX4_BASE 0x41070
 #define HEX4_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX4_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX4_CAPTURE 0
@@ -371,7 +371,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex5 altera_avalon_pio
-#define HEX5_BASE 0x41040
+#define HEX5_BASE 0x41060
 #define HEX5_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX5_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX5_CAPTURE 0
@@ -398,7 +398,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart altera_avalon_jtag_uart
-#define JTAG_UART_BASE 0x410d0
+#define JTAG_UART_BASE 0x410f0
 #define JTAG_UART_IRQ 0
 #define JTAG_UART_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_NAME "/dev/jtag_uart"
@@ -416,7 +416,7 @@
  */
 
 #define ALT_MODULE_CLASS_led altera_avalon_pio
-#define LED_BASE 0x410a0
+#define LED_BASE 0x410c0
 #define LED_BIT_CLEARING_EDGE_REGISTER 0
 #define LED_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LED_CAPTURE 0
@@ -472,7 +472,7 @@
  */
 
 #define ALT_MODULE_CLASS_switch altera_avalon_pio
-#define SWITCH_BASE 0x410b0
+#define SWITCH_BASE 0x410d0
 #define SWITCH_BIT_CLEARING_EDGE_REGISTER 0
 #define SWITCH_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define SWITCH_CAPTURE 0
@@ -494,29 +494,55 @@
 
 
 /*
- * timer configuration
+ * timer_main configuration
  *
  */
 
-#define ALT_MODULE_CLASS_timer altera_avalon_timer
-#define TIMER_ALWAYS_RUN 0
-#define TIMER_BASE 0x41020
-#define TIMER_COUNTER_SIZE 32
-#define TIMER_FIXED_PERIOD 0
-#define TIMER_FREQ 50000000
-#define TIMER_IRQ 1
-#define TIMER_IRQ_INTERRUPT_CONTROLLER_ID 0
-#define TIMER_LOAD_VALUE 49999
-#define TIMER_MULT 0.001
-#define TIMER_NAME "/dev/timer"
-#define TIMER_PERIOD 1
-#define TIMER_PERIOD_UNITS "ms"
-#define TIMER_RESET_OUTPUT 0
-#define TIMER_SNAPSHOT 1
-#define TIMER_SPAN 32
-#define TIMER_TICKS_PER_SEC 1000
-#define TIMER_TIMEOUT_PULSE_OUTPUT 0
-#define TIMER_TYPE "altera_avalon_timer"
+#define ALT_MODULE_CLASS_timer_main altera_avalon_timer
+#define TIMER_MAIN_ALWAYS_RUN 0
+#define TIMER_MAIN_BASE 0x41020
+#define TIMER_MAIN_COUNTER_SIZE 32
+#define TIMER_MAIN_FIXED_PERIOD 0
+#define TIMER_MAIN_FREQ 50000000
+#define TIMER_MAIN_IRQ 6
+#define TIMER_MAIN_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define TIMER_MAIN_LOAD_VALUE 49999
+#define TIMER_MAIN_MULT 0.001
+#define TIMER_MAIN_NAME "/dev/timer_main"
+#define TIMER_MAIN_PERIOD 1
+#define TIMER_MAIN_PERIOD_UNITS "ms"
+#define TIMER_MAIN_RESET_OUTPUT 0
+#define TIMER_MAIN_SNAPSHOT 1
+#define TIMER_MAIN_SPAN 32
+#define TIMER_MAIN_TICKS_PER_SEC 1000
+#define TIMER_MAIN_TIMEOUT_PULSE_OUTPUT 0
+#define TIMER_MAIN_TYPE "altera_avalon_timer"
+
+
+/*
+ * timer_poll configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_timer_poll altera_avalon_timer
+#define TIMER_POLL_ALWAYS_RUN 0
+#define TIMER_POLL_BASE 0x41000
+#define TIMER_POLL_COUNTER_SIZE 32
+#define TIMER_POLL_FIXED_PERIOD 0
+#define TIMER_POLL_FREQ 50000000
+#define TIMER_POLL_IRQ 7
+#define TIMER_POLL_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define TIMER_POLL_LOAD_VALUE 49999
+#define TIMER_POLL_MULT 0.001
+#define TIMER_POLL_NAME "/dev/timer_poll"
+#define TIMER_POLL_PERIOD 1
+#define TIMER_POLL_PERIOD_UNITS "ms"
+#define TIMER_POLL_RESET_OUTPUT 0
+#define TIMER_POLL_SNAPSHOT 1
+#define TIMER_POLL_SPAN 32
+#define TIMER_POLL_TICKS_PER_SEC 1000
+#define TIMER_POLL_TIMEOUT_PULSE_OUTPUT 0
+#define TIMER_POLL_TYPE "altera_avalon_timer"
 
 
 /*
@@ -525,7 +551,7 @@
  */
 
 #define ALT_MODULE_CLASS_uart altera_avalon_uart
-#define UART_BASE 0x41000
+#define UART_BASE 0x41040
 #define UART_BAUD 115200
 #define UART_DATA_BITS 8
 #define UART_FIXED_BAUD 1

@@ -16,11 +16,11 @@
 #include "altera_avalon_uart_regs.h"
 #include "altera_avalon_uart_fd.h"
 
-#define CHAR_LIM 256
+#define UART_BUFFER_LIM 64
 
 int timer = 0;
 int transmission = 0;
-alt_32 timer_period_ms = 2000;
+alt_32 timer_period_ms = 4000;
 
 void timer_init(void* isr, alt_32 timer_period_ms) {
     alt_irq_register(TIMER_IRQ, 0, isr);
@@ -61,8 +61,24 @@ void button_isr(void* context) {
     }
 }
 
+void write_BETTER(int uart_fd, char* message, int length) {
+    int chunk_size = 64; // Maximum size of each chunk
+    int offset = 0;      // Offset to track the current position in the message
+
+    while (offset < length) {
+        // Determine the size of the current chunk
+        int current_chunk_size = (length - offset > chunk_size) ? chunk_size : (length - offset);
+
+        // Write the current chunk to the UART file descriptor
+        write(uart_fd, message + offset, current_chunk_size);
+
+        // Move the offset forward by the size of the current chunk
+        offset += current_chunk_size;
+    }
+}
+
 void process_buffer(char* text, int uart_fd) {
-    char message[CHAR_LIM];
+    char message[UART_BUFFER_LIM];
     if (text == NULL) {
         sprintf(message, "[UART]: ERROR Buffer is NULL.\n");
         return;
@@ -77,14 +93,13 @@ void process_buffer(char* text, int uart_fd) {
     }
     else if (strstr(text, "info") != NULL) {
         sprintf(message, "[UART]: Detected `info` command. TRANSMISSION STATUS: %d | TIMER PERIOD: %d ms | BAUD RATE: %d | CPU FREQ: %d hz\n", transmission, timer_period_ms, UART_BAUD, NIOS2_CPU_FREQ);
-
     }
     else if (strstr(text, "rate") != NULL) {
         sprintf(message, "[UART]: Detected `rate` command.\n");
     }
     else {
     }
-    // write(uart_fd, message, strlen(message));
+    write(uart_fd, message, strlen(message));
     alt_putstr(message);
 }
 
@@ -94,8 +109,8 @@ int main() {
     alt_32 y_read;
     alt_32 z_read;
 
-    char rd_buffer[CHAR_LIM];
-    char wr_buffer[CHAR_LIM];
+    char rd_buffer[UART_BUFFER_LIM];
+    char wr_buffer[UART_BUFFER_LIM];
 
     alt_up_accelerometer_spi_dev* acc_dev = alt_up_accelerometer_spi_open_dev("/dev/accelerometer_spi");
     int uart_fd = open("/dev/uart", O_NONBLOCK | O_RDWR); // file descriptor (int) of uart core

@@ -16,27 +16,34 @@
 #include "altera_avalon_uart_regs.h"
 #include "altera_avalon_uart_fd.h"
 
-#define CHAR_LIM 256
+#define UART_BUFFER_LIM 64
 
-int timer = 0;
+int poll_uart = 0;
+int timer_main = 0;
 int transmission = 0;
-alt_32 timer_period_ms = 2000;
+alt_32 timer_main_period_ms = 400;
+alt_32 timer_poll_period_ms = 10;
 
-void timer_init(void* isr, alt_32 timer_period_ms) {
-    alt_irq_register(TIMER_IRQ, 0, isr);
+void init_timer(alt_64 base, alt_64 base_irq, alt_32 period_ms, void* isr) {
+    alt_irq_register(base_irq, 0, isr);
 
     unsigned int clock_frequency = 50000000; // 50 MHz
-    unsigned int countdown_value = (clock_frequency / 1000) * timer_period_ms;
+    unsigned int countdown_value = (clock_frequency / 1000) * period_ms;
 
-    IOWR_ALTERA_AVALON_TIMER_PERIODL(TIMER_BASE, countdown_value & 0xFFFF);
-    IOWR_ALTERA_AVALON_TIMER_PERIODH(TIMER_BASE, (countdown_value >> 16) & 0xFFFF);
+    IOWR_ALTERA_AVALON_TIMER_PERIODL(base, countdown_value & 0xFFFF);
+    IOWR_ALTERA_AVALON_TIMER_PERIODH(base, (countdown_value >> 16) & 0xFFFF);
 
-    IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_BASE, 0x7);              // not sure why masks wont work unless in a specific oder
+    IOWR_ALTERA_AVALON_TIMER_CONTROL(base, 0x7); // not sure why masks wont work unless in a specific oder
 }
 
-void timer_isr(void* context) {
-    IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_BASE, 0x1);               // clear interrupt
-    timer = 1;
+void timer_main_isr(void* context) {
+    IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_MAIN_BASE, 0x1);          // clear interrupt
+    timer_main = 1;
+}
+
+void timer_poll_isr(void* context) {
+    IOWR_ALTERA_AVALON_TIMER_STATUS(TIMER_POLL_BASE, 0x1);          // clear interrupt
+    poll_uart = 1;
 }
 
 void setup_button_interrupts(void* isr) {
@@ -62,7 +69,7 @@ void button_isr(void* context) {
 }
 
 void process_buffer(char* text, int uart_fd) {
-    char message[CHAR_LIM];
+    char message[UART_BUFFER_LIM];
     if (text == NULL) {
         sprintf(message, "[UART]: ERROR Buffer is NULL.\n");
         return;
@@ -76,16 +83,16 @@ void process_buffer(char* text, int uart_fd) {
         transmission = 0;
     }
     else if (strstr(text, "info") != NULL) {
-        sprintf(message, "[UART]: Detected `info` command. TRANSMISSION STATUS: %d | TIMER PERIOD: %d ms | BAUD RATE: %d | CPU FREQ: %d hz\n", transmission, timer_period_ms, UART_BAUD, NIOS2_CPU_FREQ);
-
+        sprintf(message, "[UART]: Detected `info` command.\n");
+        // sprintf(message, "[UART]: Detected `info` command. TRANSMISSION STATUS: %d | TIMER PERIOD: %d ms | BAUD RATE: %d | CPU FREQ: %d hz\n", transmission, timer_main_period_ms, UART_BAUD, NIOS2_CPU_FREQ);
     }
     else if (strstr(text, "rate") != NULL) {
         sprintf(message, "[UART]: Detected `rate` command.\n");
     }
     else {
     }
-    // write(uart_fd, message, strlen(message));
-    alt_putstr(message);
+    write(uart_fd, message, strlen(message));
+    // alt_putstr(message);
 }
 
 int main() {
@@ -94,8 +101,8 @@ int main() {
     alt_32 y_read;
     alt_32 z_read;
 
-    char rd_buffer[CHAR_LIM];
-    char wr_buffer[CHAR_LIM];
+    char rd_buffer[UART_BUFFER_LIM];
+    char wr_buffer[UART_BUFFER_LIM];
 
     alt_up_accelerometer_spi_dev* acc_dev = alt_up_accelerometer_spi_open_dev("/dev/accelerometer_spi");
     int uart_fd = open("/dev/uart", O_NONBLOCK | O_RDWR); // file descriptor (int) of uart core
@@ -106,18 +113,20 @@ int main() {
         alt_putstr("SUCCESS: `/dev/accelerometer_spi` and `/dev/uart` opened successfully.\n");
     }
 
-    timer_init(timer_isr, timer_period_ms);
+    init_timer(TIMER_MAIN_BASE, TIMER_MAIN_IRQ, timer_main_period_ms, timer_main_isr);
+    init_timer(TIMER_POLL_BASE, TIMER_POLL_IRQ, timer_poll_period_ms, timer_poll_isr);
     setup_button_interrupts(button_isr);
 
     while (1) {
-        if(timer){
-
-            ssize_t bytes_read = read(uart_fd, rd_buffer, sizeof(rd_buffer)-1);
-            if(bytes_read > 0) {
-                process_buffer(rd_buffer, uart_fd);
+            if(poll_uart) {
+                ssize_t bytes_read = read(uart_fd, rd_buffer, sizeof(rd_buffer)-1);
+                if(bytes_read > 0) {
+                    process_buffer(rd_buffer, uart_fd);
+                }
+                poll_uart = 0;
             }
 
-            if(transmission){
+            if(timer_main && transmission){
 
                 alt_up_accelerometer_spi_read_x_axis(acc_dev, &x_read);
                 alt_up_accelerometer_spi_read_y_axis(acc_dev, &y_read);
@@ -126,10 +135,8 @@ int main() {
                 sprintf(wr_buffer, "%d, %d, %d\n", (int)x_read, (int)y_read, (int)z_read);
                 write(uart_fd, wr_buffer, strlen(wr_buffer)); // write returns bytes written, useful for debugging.
 
-            }
-
-            timer = 0;
-        }
+                timer_main = 0;
+            }        
     }
 
     return 0;
