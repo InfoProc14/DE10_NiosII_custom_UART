@@ -17,12 +17,47 @@
 #include "altera_avalon_uart_fd.h"
 
 #define UART_BUFFER_LIM 64
+#define FILTER_N 49
 
 int poll_uart = 0;
 int timer_main = 0;
 int transmission = 0;
-alt_32 timer_main_period_ms = 400;
+
 alt_32 timer_poll_period_ms = 10;
+alt_32 timer_main_period_ms = 400;
+
+typedef struct filter_s {
+    alt_32 x_buffer[FILTER_N];
+    alt_32 y_buffer[FILTER_N];
+    alt_32 z_buffer[FILTER_N];
+    alt_16 filt_coeff[FILTER_N];
+    int buffer_offset;
+} filter_s;
+
+void push_to_buffers(filter_s* filter, alt_32 x, alt_32 y, alt_32 z){
+    filter->x_buffer[filter->buffer_offset] = x;
+    filter->y_buffer[filter->buffer_offset] = y;
+    filter->z_buffer[filter->buffer_offset] = z;
+    filter->buffer_offset = (filter->buffer_offset+1) % FILTER_N;
+}
+
+void convolve(const filter_s* filter, alt_32* x, alt_32* y, alt_32* z){
+    alt_32 x_sum = 0;
+    alt_32 y_sum = 0;
+    alt_32 z_sum = 0;
+
+    for(int i = 0; i < FILTER_N; i++) {
+		int buffer_index = (i+filter->buffer_offset-1) % FILTER_N;
+		int coeff_index = FILTER_N - i;
+		x_sum += filter->x_buffer[buffer_index] * (alt_32)filter->filt_coeff[coeff_index];
+		y_sum += filter->y_buffer[buffer_index] * (alt_32)filter->filt_coeff[coeff_index];
+		z_sum += filter->z_buffer[buffer_index] * (alt_32)filter->filt_coeff[coeff_index];
+    }
+
+    *x = x_sum >> 16;
+    *y = y_sum >> 16;
+    *z = z_sum >> 16;
+}
 
 void init_timer(alt_64 base, alt_64 base_irq, alt_32 period_ms, void* isr) {
     alt_irq_register(base_irq, 0, isr);
@@ -89,6 +124,9 @@ void process_buffer(char* text, int uart_fd) {
     else if (strstr(text, "rate") != NULL) {
         sprintf(message, "[UART]: Detected `rate` command.\n");
     }
+    else if (strstr(text, "help") != NULL) {
+        sprintf(message, "[UART]: Detected `help` command.\n");
+    }
     else {
     }
     write(uart_fd, message, strlen(message));
@@ -97,9 +135,17 @@ void process_buffer(char* text, int uart_fd) {
 
 int main() {
 
-    alt_32 x_read;
-    alt_32 y_read;
-    alt_32 z_read;
+    alt_32 x_read, x_read_filtered;
+    alt_32 y_read, y_read_filtered;
+    alt_32 z_read, z_read_filtered;
+
+    filter_s filter_obj = {
+        .x_buffer = {0},
+        .y_buffer = {0},
+        .z_buffer = {0},
+        .buffer_offset = 0,
+        .filt_coeff = {0b1111111111000100, 0b1111111101001100, 0b1111111101011001, 0b0000000011101001, 0b0000001101111000, 0b0000010001101111, 0b0000000111111001, 0b1111111001010110, 0b1111111000001001, 0b0000000110001111, 0b0000001110001110, 0b0000000000011010, 0b1111101110101110, 0b1111110110110111, 0b0000010001110101, 0b0000010101010000, 0b1111110011011100, 0b1111011100111100, 0b1111111110111010, 0b0000110000111011, 0b0000011100000011, 0b1111000011001110, 0b1110101011101101, 0b0001000100110001, 0b0100111101011110, 0b0110111000011010, 0b0100111101011110, 0b0001000100110001, 0b1110101011101101, 0b1111000011001110, 0b0000011100000011, 0b0000110000111011, 0b1111111110111010, 0b1111011100111100, 0b1111110011011100, 0b0000010101010000, 0b0000010001110101, 0b1111110110110111, 0b1111101110101110, 0b0000000000011010, 0b0000001110001110, 0b0000000110001111, 0b1111111000001001, 0b1111111001010110, 0b0000000111111001, 0b0000010001101111, 0b0000001101111000, 0b0000000011101001, 0b1111111101011001, 0b1111111101001100, 0b1111111111000100}
+    };
 
     char rd_buffer[UART_BUFFER_LIM];
     char wr_buffer[UART_BUFFER_LIM];
@@ -126,14 +172,21 @@ int main() {
                 poll_uart = 0;
             }
 
+            alt_up_accelerometer_spi_read_x_axis(acc_dev, &x_read);
+            alt_up_accelerometer_spi_read_y_axis(acc_dev, &y_read);
+            alt_up_accelerometer_spi_read_z_axis(acc_dev, &z_read);
+
+            push_to_buffers(&filter_obj, x_read, y_read, z_read);
+
             if(timer_main && transmission){
 
-                alt_up_accelerometer_spi_read_x_axis(acc_dev, &x_read);
-                alt_up_accelerometer_spi_read_y_axis(acc_dev, &y_read);
-                alt_up_accelerometer_spi_read_z_axis(acc_dev, &z_read);
+                convolve(&filter_obj, &x_read_filtered, &y_read_filtered, &z_read_filtered);
                 
-                sprintf(wr_buffer, "%d, %d, %d\n", (int)x_read, (int)y_read, (int)z_read);
-                write(uart_fd, wr_buffer, strlen(wr_buffer)); // write returns bytes written, useful for debugging.
+                sprintf(wr_buffer, "%d, %d, %d\n", (int)x_read_filtered, (int)y_read_filtered, (int)z_read_filtered);
+                // sprintf(wr_buffer, "%d, %d, %d\n", (int)x_read, (int)y_read, (int)z_read);
+
+                write(uart_fd, wr_buffer, strlen(wr_buffer));
+                alt_putstr(wr_buffer);
 
                 timer_main = 0;
             }        
