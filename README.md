@@ -1,59 +1,65 @@
-# Summary
+# Summary  
 - `src/` contains several decoupled examples on how to use different aspects of the UART core. Also includes the top level `.sv` file for the system.
-    - Note that file descriptors (`int`) are used to target the UART core.
-    - They can be initiated with non-blocking operation.
-    - They use `open()`, `read()` and `write()`.
-    - Descriptors give finer control than using file pointers (`FILE*`) but both are accessed via `"/dev/uart"`.
+    - Uses file descriptors (`int`) for UART control (opened via `open("/dev/uart", ...)`).
+    - Non-blocking UART operations enabled for concurrent transmit/receive.
+    - File descriptors provide lower-level control compared to `FILE*` streams.
 
-- The system `.qsys` and `.sopcinfo` are located in `platform-designer/`
+- System design files (`.qsys`, `.sopcinfo`) are in `platform-designer/`.
 
-- Current implementation of `software/uart_accelerometer/` attemps to combine transmission of accelerometer data via UART, with the capability to read and process incoming UART.
-    - Printing incoming UART commented out bc its messy with transmit and receive in the same terminal.
-
----
-
-# Implementation
-## system specification
-- Nios II/e with 128,800 bytes of on-chip memory
-- Accelerometer SPI
-- Intel UART (RS-232) Core
-    - **Baud rate 115200**. 8 data bits, 1 stop bit. 
-- Intel JTAG UART Core
-- 1 Interval Timer
-- DE10 Peripherals: buttons, switches and hex displays
-
-The `RX` `TX` pins of the UART core are exposed connections and have been mapped to:
-- UART core `RX` -> `D0` of Arduino GPIO
-- UART core `TX` -> `D1` of Arduino GPIO
-
-Note that `D0` and `D1` are the Arduino's UART pins for `TX` and `RX` respectively.
-
-## Software
-- Transmits accelerometer XYZ data via UART upon each timer interrupt
-    - The timer ISR controls the global flag `timer`, setting it to 1
-    - The main while loop enters upon this condition, and resets it to 0 after executing
-    - The timer period can be changed to modify the sample rate of accelerometer data
-
-- Global flag `transmission` used to enable/disable transmission
-    - Accelerometer data will only transmit with `timer` and `transmission` enabled
-
-- UART core opened as non-blocking, and attempts to read into buffer on every `timer` loop
-    - Only process the buffer if > 0 bytes read successfully
-
-- Buttons used to control `transmission` flag via interrupts
-    - `KEY[0]` enables transmission
-    - `KEY[1]` disables transmission
+- `software/uart_accelerometer/` integrates accelerometer data filtering and UART communication:  
+    - Transmits filtered XYZ accelerometer data at configurable intervals.
+    - Processes incoming UART commands (e.g., `start`, `stop`, `rate`).
+    - Terminal output during transmission is minimized to avoid clutter.
 
 ---
 
-# Issues
+# Implementation  
 
-- Ideally would like process the UART read independant of the `timer` flag (i.e. poll on every iteration of the main while loop)
-    - However, as it has been initiated as non-blocking, the reads will be incomplete if the polling frequency is too high.
-    - I.e. if reading `"Hello World\n"` it will generally only manage to read the first character "H" before the next read intercepts it. Results in something like `"HHHHHHHHHHHHHHH <...>"`
+## System Specification  
+- **Nios II/e CPU** with 128,800 bytes on-chip memory.
+- **Accelerometer**: SPI interface for XYZ-axis data.
+- **UART Cores**:  
+    - Intel UART (RS-232) at **115200 baud**, 8 data bits, 1 stop bit.
+    - JTAG UART for debugging.
+- **Timers**:  
+    - `TIMER_MAIN`: Controls accelerometer sampling rate (default 400 ms period).
+    - `TIMER_POLL`: Polls UART for incoming data (default 10 ms period).
+- **DE10 Peripherals**: Buttons, switches, and hex displays.
+- **Pin Mapping**:  
+    - UART `RX` → Arduino GPIO `D0`.
+    - UART `TX` → Arduino GPIO `D1`.
 
-- Similarly, writing can overwrite the previous write before it is completed, given a high enough frequency.
-    - If writing `"Hello World\n"`, it again may only manage to transmit "H" before the next write intercepts it. Again, results in transmitting something like `"HHHHHHHHHHHHHHH <...>"`
+---
 
-- No filter implemented yet. 
-- Also a bunch of headers that I probably don't need.
+## Software  
+
+### Core Features  
+1. **Filtered Accelerometer Data Transmission**:  
+    - Uses a **FIR filter** with predefined coefficients (length `FILTER_N = 49`) to process raw accelerometer data.
+    - Filter buffers store recent samples; convolution is applied during transmission.
+    - Output format: `x_filtered y_filtered z_filtered\n`.
+
+2. **UART Command Interface**:  
+    - Processes commands from UART (e.g., `start`, `stop`, `rate 10`).
+    - Supported commands:  
+        - `start`: Enable data transmission.
+        - `stop`: Disable data transmission.
+        - `rate <Hz>`: Set sampling rate (e.g., `rate 5` → 200 ms period).
+        - `info`: Display system status (transmission state, timer period, baud rate).
+        - `help`: List available commands.
+
+3. **Interrupt-Driven Control**:  
+    - **Buttons**:  
+        - `KEY[0]`: Enable transmission (ISR sets `transmission = 1`).
+        - `KEY[1]`: Disable transmission (ISR sets `transmission = 0`).
+    - **Timers**:  
+        - `TIMER_MAIN`: Triggers accelerometer sampling and filtering.
+        - `TIMER_POLL`: Checks UART for incoming data.
+
+---
+
+### Configuration  
+- **Sampling Rate**: Adjust `timer_main_period_ms` (default 400 ms) or send `rate <Hz>` via UART.
+- **Filter Coefficients**: Modify `filt_coeff` array in `filter_obj` for custom FIR behavior. 
+
+--- 

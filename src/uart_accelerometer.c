@@ -220,7 +220,7 @@ int main() {
 
                 convolve(&filter_obj, &x_read_filtered, &y_read_filtered, &z_read_filtered);
                 
-                sprintf(wr_buffer, "%d, %d, %d\n", (int)x_read_filtered, (int)y_read_filtered, (int)z_read_filtered);
+                sprintf(wr_buffer, "%d %d %d\n", (int)x_read_filtered, (int)y_read_filtered, (int)z_read_filtered);
 
                 write(uart_fd, wr_buffer, strlen(wr_buffer));
                 // alt_putstr(wr_buffer);
