@@ -15,6 +15,7 @@
 #include "altera_avalon_uart.h"
 #include "altera_avalon_uart_regs.h"
 #include "altera_avalon_uart_fd.h"
+#include "altera_avalon_pio_regs.h"
 
 #define UART_BUFFER_LIM 64
 #define FILTER_N 49
@@ -116,27 +117,11 @@ void process_buffer(char* text, int uart_fd) {
         write(uart_fd, message, strlen(message));
         return;
     }
-    else if (strstr(text, "start") != NULL) { // note currently constructed with if-else, so string with multiple commands will only process the first one
-        sprintf(message, "[UART]: Detected `start` command. Enabling data transmission.\n");
+    else if (strstr(text, "id") != NULL) {
+        int id_switch = IORD_ALTERA_AVALON_PIO_DATA(SWITCH_BASE);
+		// id_switch &= (0b1);
+        sprintf(message, "ID %d\n", id_switch);
         write(uart_fd, message, strlen(message));
-        transmission = 1;
-    }
-    else if (strstr(text, "stop") != NULL) {
-        sprintf(message, "[UART]: Detected `stop` command. Disabling data transmission.\n");
-        write(uart_fd, message, strlen(message));
-        transmission = 0;
-    }
-    else if (strstr(text, "info") != NULL) {
-        sprintf(message, "[UART]: Detected `info` command. ");
-        write(uart_fd, message, strlen(message));
-        uart_wait_trdy();
-        sprintf(message, "TRANSMISSION STATUS: %d | TIMER PERIOD: %d ms | ", transmission, timer_main_period_ms);
-        write(uart_fd, message, strlen(message));
-        uart_wait_trdy();
-        sprintf(message, "BAUD RATE: %d | CPU FREQ: %d Hz\n", UART_BAUD, NIOS2_CPU_FREQ);
-        write(uart_fd, message, strlen(message));
-
-        // sprintf(message, "[UART]: Detected `info` command. TRANSMISSION STATUS: %d | TIMER PERIOD: %d ms | BAUD RATE: %d | CPU FREQ: %d hz\n", transmission, timer_main_period_ms, UART_BAUD, NIOS2_CPU_FREQ);
     }
     else if (strstr(text, "rate") != NULL) {
         sprintf(message, "[UART]: Detected `rate` command. ");
@@ -158,6 +143,28 @@ void process_buffer(char* text, int uart_fd) {
             sprintf(message, "Please format as `rate <number>` in Hz.\n");
             write(uart_fd, message, strlen(message));
         }
+    }
+    else if (strstr(text, "start") != NULL) { // note currently constructed with if-else, so string with multiple commands will only process the first one
+        sprintf(message, "[UART]: Detected `start` command. Enabling data transmission.\n");
+        write(uart_fd, message, strlen(message));
+        transmission = 1;
+    }
+    else if (strstr(text, "stop") != NULL) {
+        sprintf(message, "[UART]: Detected `stop` command. Disabling data transmission.\n");
+        write(uart_fd, message, strlen(message));
+        transmission = 0;
+    }
+    else if (strstr(text, "info") != NULL) {
+        sprintf(message, "[UART]: Detected `info` command. ");
+        write(uart_fd, message, strlen(message));
+        uart_wait_trdy();
+        sprintf(message, "TRANSMISSION STATUS: %d | TIMER PERIOD: %d ms | ", transmission, timer_main_period_ms);
+        write(uart_fd, message, strlen(message));
+        uart_wait_trdy();
+        sprintf(message, "BAUD RATE: %d | CPU FREQ: %d Hz\n", UART_BAUD, NIOS2_CPU_FREQ);
+        write(uart_fd, message, strlen(message));
+
+        // sprintf(message, "[UART]: Detected `info` command. TRANSMISSION STATUS: %d | TIMER PERIOD: %d ms | BAUD RATE: %d | CPU FREQ: %d hz\n", transmission, timer_main_period_ms, UART_BAUD, NIOS2_CPU_FREQ);
     }
     else if (strstr(text, "help") != NULL) {
         sprintf(message, "[UART]: Detected `help` command. ");

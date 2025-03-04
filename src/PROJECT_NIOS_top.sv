@@ -63,6 +63,7 @@ module PROJECT_NIOS_top(
 		.accelerometer_spi_external_interface_G_SENSOR_CS_N (GSENSOR_CS_N),
 		.accelerometer_spi_external_interface_G_SENSOR_INT  (GSENSOR_INT[1]),
 		.button_external_connection_export              	(KEY),
+		.switch_external_connection_export                  (SW),
 		.clk_clk                                        	(MAX10_CLK1_50),
 		.hex0_external_connection_export                	(HEX0),
 		.hex1_external_connection_export                	(HEX1),

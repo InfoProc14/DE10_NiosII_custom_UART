@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'PROJECT_NIOS'
  * SOPC Builder design path: ../../platform-designer/PROJECT_NIOS.sopcinfo
  *
- * Generated: Sat Mar 01 15:47:25 GMT 2025
+ * Generated: Tue Mar 04 12:57:51 GMT 2025
  */
 
 /*
@@ -473,20 +473,20 @@
 
 #define ALT_MODULE_CLASS_switch altera_avalon_pio
 #define SWITCH_BASE 0x410d0
-#define SWITCH_BIT_CLEARING_EDGE_REGISTER 0
+#define SWITCH_BIT_CLEARING_EDGE_REGISTER 1
 #define SWITCH_BIT_MODIFYING_OUTPUT_REGISTER 0
-#define SWITCH_CAPTURE 0
+#define SWITCH_CAPTURE 1
 #define SWITCH_DATA_WIDTH 10
 #define SWITCH_DO_TEST_BENCH_WIRING 0
 #define SWITCH_DRIVEN_SIM_VALUE 0
-#define SWITCH_EDGE_TYPE "NONE"
+#define SWITCH_EDGE_TYPE "ANY"
 #define SWITCH_FREQ 50000000
 #define SWITCH_HAS_IN 1
 #define SWITCH_HAS_OUT 0
 #define SWITCH_HAS_TRI 0
 #define SWITCH_IRQ 2
 #define SWITCH_IRQ_INTERRUPT_CONTROLLER_ID 0
-#define SWITCH_IRQ_TYPE "LEVEL"
+#define SWITCH_IRQ_TYPE "EDGE"
 #define SWITCH_NAME "/dev/switch"
 #define SWITCH_RESET_VALUE 0
 #define SWITCH_SPAN 16
