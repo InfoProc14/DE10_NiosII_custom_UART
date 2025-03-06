@@ -9,8 +9,7 @@
 - `software/uart_accelerometer/` integrates accelerometer data filtering and UART communication:  
     - Transmits filtered XYZ accelerometer data at configurable intervals.
     - Processes incoming UART commands (e.g., `start`, `stop`, `rate`).
-    - Terminal output during transmission is minimized to avoid clutter.
-
+    - Device ID is controlled by FPGA switch `SW[0]` and can be queried via the `id` UART command.
 ---
 
 # Implementation  
@@ -41,7 +40,8 @@
 
 2. **UART Command Interface**:  
     - Processes commands from UART (e.g., `start`, `stop`, `rate 10`).
-    - Supported commands:  
+    - Supported commands:
+        - `id`: Returns the current device ID based on the state of `SW[0]`.
         - `start`: Enable data transmission.
         - `stop`: Disable data transmission.
         - `rate <Hz>`: Set sampling rate (e.g., `rate 5` → 200 ms period).
@@ -55,6 +55,13 @@
     - **Timers**:  
         - `TIMER_MAIN`: Triggers accelerometer sampling and filtering.
         - `TIMER_POLL`: Checks UART for incoming data.
+
+4. **Device ID Management**:
+
+    - The FPGA switch SW[0] controls the device ID.
+        - SW[0] = 0 (pulled DOWN): `ID 1`.
+        - SW[1] = 1 (pulled UP): `ID 2`.
+        - The "`id`" UART command queries the current state of `SW[0]` and returns the corresponding device ID.
 
 ---
 
