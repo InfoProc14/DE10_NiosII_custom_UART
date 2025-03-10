@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'PROJECT_NIOS'
  * SOPC Builder design path: ../../platform-designer/PROJECT_NIOS.sopcinfo
  *
- * Generated: Tue Mar 04 12:57:51 GMT 2025
+ * Generated: Fri Mar 07 19:05:49 GMT 2025
  */
 
 /*

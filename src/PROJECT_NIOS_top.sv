@@ -82,8 +82,8 @@ module PROJECT_NIOS_top(
 		// .sdram_wire_dqm                                     ({DRAM_UDQM, DRAM_LDQM}),
 		// .sdram_wire_ras_n                                   (DRAM_RAS_N),
 		// .sdram_wire_we_n                                    (DRAM_WE_N),
-		.uart_external_connection_rxd                       (ARDUINO_IO[1]), 	// uart RX goes to arduino TX (D1)
-		.uart_external_connection_txd                       (ARDUINO_IO[0])		// uart TX goes to arduino RX (D0)
+		.uart_external_connection_rxd                       (ARDUINO_IO[15]), 	// uart RX goes to arduino TX (D1)
+		.uart_external_connection_txd                       (ARDUINO_IO[14])		// uart TX goes to arduino RX (D0)
 	);
 
 endmodule
