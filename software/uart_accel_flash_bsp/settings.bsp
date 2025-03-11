@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Mar 10, 2025 3:57:33 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1741622253668</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 11, 2025 11:30:14 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1741692614884</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\clark\Documents\eie-y2\info-processing-labs\PROJECT_NIOS\software\uart_accel_flash_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>C:\Users\clark\Documents\eie-y2\info-processing-labs\PROJECT_NIOS\platform-designer-flash\PROJECT_NIOS.sopcinfo</SopcDesignFile>

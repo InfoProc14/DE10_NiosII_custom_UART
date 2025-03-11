@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>07-Mar-2025 19:05:48</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1741374348849</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>10-Mar-2025 19:36:02</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1741635362436</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Users\clark\Documents\eie-y2\info-processing-labs\PROJECT_NIOS\software\PROJECT_NIOS_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\platform-designer\PROJECT_NIOS.sopcinfo</SopcDesignFile>
@@ -926,7 +926,7 @@
                 <slaveDescriptor>onchip_memory</slaveDescriptor>
                 <addressRange>0x00020000 - 0x0003F71F</addressRange>
                 <addressSpan>128800</addressSpan>
-                <attributes>memory</attributes>
+                <attributes>memory, non-volatile</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>timer_poll</slaveDescriptor>

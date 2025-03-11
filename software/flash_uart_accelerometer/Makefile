@@ -177,7 +177,7 @@ CRT0 :=
 SYS_LIB :=
 
 # Define path to the root of the BSP.
-BSP_ROOT_DIR := ../uart_accel_flash_bsp
+BSP_ROOT_DIR := ../v2_flash_bsp
 
 # List of application specific include directories, library directories and library names
 APP_INCLUDE_DIRS :=

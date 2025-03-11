@@ -696,8 +696,8 @@
   <parameter name="ecc_enabled" value="false" />
   <parameter name="enPRInitMode" value="false" />
   <parameter name="enableDiffWidth" value="false" />
-  <parameter name="initMemContent" value="false" />
-  <parameter name="initializationFileName" value="onchip_mem.hex" />
+  <parameter name="initMemContent" value="true" />
+  <parameter name="initializationFileName">C:/Users/clark/Documents/eie-y2/info-processing-labs/PROJECT_NIOS/software/uart_accelerometer/uart_accelerometer.hex</parameter>
   <parameter name="instanceID" value="NONE" />
   <parameter name="memorySize" value="128800" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
@@ -707,9 +707,9 @@
   <parameter name="singleClockOperation" value="false" />
   <parameter name="slave1Latency" value="1" />
   <parameter name="slave2Latency" value="1" />
-  <parameter name="useNonDefaultInitFile" value="false" />
+  <parameter name="useNonDefaultInitFile" value="true" />
   <parameter name="useShallowMemBlocks" value="false" />
-  <parameter name="writable" value="true" />
+  <parameter name="writable" value="false" />
  </module>
  <module name="switch" kind="altera_avalon_pio" version="18.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="true" />

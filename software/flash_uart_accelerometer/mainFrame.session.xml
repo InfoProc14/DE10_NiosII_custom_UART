@@ -5,7 +5,7 @@
    <string>jTabbedPane1/log_tab_pane/JPanel1/JSplitPane0/MainWindow/null.contentPane/null.layeredPane/JRootPane0/mainFrame</string>
    <object class="org.jdesktop.application.SessionStorage$TabbedPaneState">
     <void property="selectedIndex">
-     <int>1</int>
+     <int>2</int>
     </void>
     <void property="tabCount">
      <int>3</int>

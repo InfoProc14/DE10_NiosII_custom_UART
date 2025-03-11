@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="PROJECT_NIOS" kind="PROJECT_NIOS" version="1.0" fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2025.03.07.19:02:05 -->
+ <!-- 2025.03.10.19:18:01 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1741374125</value>
+  <value>1741634281</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -11576,11 +11576,11 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.INIT_CONTENTS_FILE</name>
-   <value>PROJECT_NIOS_onchip_memory</value>
+   <value>uart_accelerometer</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.INIT_MEM_CONTENT</name>
-   <value>0</value>
+   <value>1</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.INSTANCE_ID</name>
@@ -11588,7 +11588,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.NON_DEFAULT_INIT_FILE_ENABLED</name>
-   <value>0</value>
+   <value>1</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.RAM_BLOCK_TYPE</name>
@@ -11612,7 +11612,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.WRITABLE</name>
-   <value>1</value>
+   <value>0</value>
   </assignment>
   <assignment>
    <name>embeddedsw.memoryInfo.DAT_SYM_INSTALL_DIR</name>
@@ -11640,7 +11640,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.memoryInfo.MEM_INIT_FILENAME</name>
-   <value>PROJECT_NIOS_onchip_memory</value>
+   <value>uart_accelerometer</value>
   </assignment>
   <assignment>
    <name>postgeneration.simulation.init_file.param_name</name>
@@ -11708,7 +11708,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="initMemContent">
    <type>boolean</type>
-   <value>false</value>
+   <value>true</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -11716,9 +11716,9 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="initializationFileName">
    <type>java.lang.String</type>
-   <value>onchip_mem.hex</value>
+   <value>C:/Users/clark/Documents/eie-y2/info-processing-labs/PROJECT_NIOS/software/uart_accelerometer/uart_accelerometer.hex</value>
    <derived>false</derived>
-   <enabled>false</enabled>
+   <enabled>true</enabled>
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
@@ -11726,7 +11726,7 @@ the requested settings for a module instance. -->
    <type>boolean</type>
    <value>false</value>
    <derived>false</derived>
-   <enabled>false</enabled>
+   <enabled>true</enabled>
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
@@ -11804,9 +11804,9 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="useNonDefaultInitFile">
    <type>boolean</type>
-   <value>false</value>
+   <value>true</value>
    <derived>false</derived>
-   <enabled>false</enabled>
+   <enabled>true</enabled>
    <visible>true</visible>
    <valid>true</valid>
   </parameter>
@@ -11814,7 +11814,7 @@ the requested settings for a module instance. -->
    <type>boolean</type>
    <value>false</value>
    <derived>false</derived>
-   <enabled>false</enabled>
+   <enabled>true</enabled>
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
@@ -11828,7 +11828,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="writable">
    <type>boolean</type>
-   <value>true</value>
+   <value>false</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -11927,7 +11927,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="derived_init_file_name">
    <type>java.lang.String</type>
-   <value>PROJECT_NIOS_onchip_memory.hex</value>
+   <value>C:/Users/clark/Documents/eie-y2/info-processing-labs/PROJECT_NIOS/software/uart_accelerometer/uart_accelerometer.hex</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -12000,7 +12000,7 @@ parameters are a RESULT of the module parameters. -->
    </assignment>
    <assignment>
     <name>embeddedsw.configuration.isNonVolatileStorage</name>
-    <value>0</value>
+    <value>1</value>
    </assignment>
    <assignment>
     <name>embeddedsw.configuration.isPrintableDevice</name>
@@ -12160,7 +12160,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="isNonVolatileStorage">
     <type>boolean</type>
-    <value>false</value>
+    <value>true</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -12325,6 +12325,12 @@ parameters are a RESULT of the module parameters. -->
     <direction>Input</direction>
     <width>15</width>
     <role>address</role>
+   </port>
+   <port>
+    <name>debugaccess</name>
+    <direction>Input</direction>
+    <width>1</width>
+    <role>debugaccess</role>
    </port>
    <port>
     <name>clken</name>
