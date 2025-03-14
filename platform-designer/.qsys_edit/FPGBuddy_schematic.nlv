@@ -1,0 +1,44 @@
+# # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
+# 
+preplace inst PROJECT_NIOS.led -pg 1 -lvl 3 -y 1370
+preplace inst PROJECT_NIOS.hex2 -pg 1 -lvl 3 -y 1570
+preplace inst PROJECT_NIOS.cpu.cpu -pg 1
+preplace inst PROJECT_NIOS.jtag_uart -pg 1 -lvl 3 -y 270
+preplace inst PROJECT_NIOS.hex3 -pg 1 -lvl 3 -y 970
+preplace inst PROJECT_NIOS.timer_main -pg 1 -lvl 3 -y 1070
+preplace inst PROJECT_NIOS.hex4 -pg 1 -lvl 3 -y 1170
+preplace inst PROJECT_NIOS.cpu -pg 1 -lvl 2 -y 520
+preplace inst PROJECT_NIOS.accelerometer_spi -pg 1 -lvl 3 -y 30
+preplace inst PROJECT_NIOS.hex5 -pg 1 -lvl 3 -y 1270
+preplace inst PROJECT_NIOS -pg 1 -lvl 1 -y 40 -regy -20
+preplace inst PROJECT_NIOS.sysid_qsys_0 -pg 1 -lvl 3 -y 1770
+preplace inst PROJECT_NIOS.button -pg 1 -lvl 3 -y 150
+preplace inst PROJECT_NIOS.cpu.reset_bridge -pg 1
+preplace inst PROJECT_NIOS.switch -pg 1 -lvl 3 -y 730
+preplace inst PROJECT_NIOS.uart -pg 1 -lvl 3 -y 850
+preplace inst PROJECT_NIOS.onchip_flash -pg 1 -lvl 3 -y 1670
+preplace inst PROJECT_NIOS.clk -pg 1 -lvl 1 -y 590
+preplace inst PROJECT_NIOS.timer_poll -pg 1 -lvl 3 -y 1470
+preplace inst PROJECT_NIOS.onchip_memory -pg 1 -lvl 3 -y 370
+preplace inst PROJECT_NIOS.hex0 -pg 1 -lvl 3 -y 530
+preplace inst PROJECT_NIOS.cpu.clock_bridge -pg 1
+preplace inst PROJECT_NIOS.hex1 -pg 1 -lvl 3 -y 630
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.hex0_external_connection,(SLAVE)hex0.external_connection) 1 0 3 NJ 660 NJ 660 NJ
+preplace netloc INTERCONNECT<net_container>PROJECT_NIOS</net_container>(SLAVE)hex5.s1,(MASTER)cpu.data_master,(SLAVE)hex2.s1,(SLAVE)accelerometer_spi.avalon_accelerometer_spi_mode_slave,(SLAVE)jtag_uart.avalon_jtag_slave,(SLAVE)hex1.s1,(MASTER)cpu.instruction_master,(SLAVE)onchip_flash.csr,(SLAVE)timer_main.s1,(SLAVE)onchip_memory.s1,(SLAVE)sysid_qsys_0.control_slave,(SLAVE)onchip_flash.data,(SLAVE)hex4.s1,(SLAVE)timer_poll.s1,(SLAVE)button.s1,(SLAVE)switch.s1,(SLAVE)hex3.s1,(SLAVE)uart.s1,(SLAVE)cpu.debug_mem_slave,(SLAVE)led.s1,(SLAVE)hex0.s1) 1 1 2 430 480 830
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.reset,(SLAVE)clk.clk_in_reset) 1 0 1 NJ
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.hex5_external_connection,(SLAVE)hex5.external_connection) 1 0 3 NJ 1300 NJ 1300 NJ
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.hex2_external_connection,(SLAVE)hex2.external_connection) 1 0 3 NJ 1600 NJ 1600 NJ
+preplace netloc FAN_OUT<net_container>PROJECT_NIOS</net_container>(SLAVE)hex1.clk,(SLAVE)hex2.clk,(SLAVE)uart.clk,(SLAVE)hex0.clk,(SLAVE)hex3.clk,(SLAVE)jtag_uart.clk,(SLAVE)hex5.clk,(SLAVE)onchip_memory.clk1,(SLAVE)timer_poll.clk,(MASTER)clk.clk,(SLAVE)accelerometer_spi.clk,(SLAVE)sysid_qsys_0.clk,(SLAVE)cpu.clk,(SLAVE)led.clk,(SLAVE)onchip_flash.clk,(SLAVE)button.clk,(SLAVE)timer_main.clk,(SLAVE)hex4.clk,(SLAVE)switch.clk) 1 1 2 410 460 870
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)uart.external_connection,(SLAVE)PROJECT_NIOS.uart_external_connection) 1 0 3 NJ 880 NJ 880 NJ
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.led_external_connection,(SLAVE)led.external_connection) 1 0 3 NJ 1400 NJ 1400 NJ
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.clk,(SLAVE)clk.clk_in) 1 0 1 NJ
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)hex3.external_connection,(SLAVE)PROJECT_NIOS.hex3_external_connection) 1 0 3 NJ 1000 NJ 1000 NJ
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.accelerometer_spi_external_interface,(SLAVE)accelerometer_spi.external_interface) 1 0 3 NJ 80 NJ 80 NJ
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.hex4_external_connection,(SLAVE)hex4.external_connection) 1 0 3 NJ 1200 NJ 1200 NJ
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.hex1_external_connection,(SLAVE)hex1.external_connection) 1 0 3 NJ 680 NJ 680 NJ
+preplace netloc FAN_OUT<net_container>PROJECT_NIOS</net_container>(SLAVE)button.reset,(SLAVE)sysid_qsys_0.reset,(MASTER)clk.clk_reset,(SLAVE)hex0.reset,(SLAVE)onchip_memory.reset1,(SLAVE)accelerometer_spi.reset,(SLAVE)hex4.reset,(SLAVE)hex3.reset,(SLAVE)uart.reset,(SLAVE)onchip_flash.nreset,(SLAVE)timer_poll.reset,(SLAVE)timer_main.reset,(SLAVE)cpu.reset,(SLAVE)jtag_uart.reset,(SLAVE)led.reset,(SLAVE)hex2.reset,(SLAVE)hex5.reset,(SLAVE)switch.reset,(SLAVE)hex1.reset) 1 1 2 430 1620 910
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)PROJECT_NIOS.switch_external_connection,(SLAVE)switch.external_connection) 1 0 3 NJ 760 NJ 760 NJ
+preplace netloc EXPORT<net_container>PROJECT_NIOS</net_container>(SLAVE)button.external_connection,(SLAVE)PROJECT_NIOS.button_external_connection) 1 0 3 NJ 180 NJ 180 NJ
+preplace netloc FAN_OUT<net_container>PROJECT_NIOS</net_container>(SLAVE)jtag_uart.irq,(SLAVE)timer_main.irq,(SLAVE)accelerometer_spi.interrupt,(SLAVE)switch.irq,(SLAVE)uart.irq,(SLAVE)button.irq,(MASTER)cpu.irq,(SLAVE)timer_poll.irq) 1 2 1 810
+levelinfo -pg 1 0 200 1210
+levelinfo -hier PROJECT_NIOS 210 240 570 950 1200

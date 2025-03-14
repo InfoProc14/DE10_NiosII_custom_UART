@@ -1,0 +1,18 @@
+Fitter Status : Successful - Fri Mar 14 16:11:11 2025
+Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+Revision Name : FPGBuddy_top
+Top-level Entity Name : FPGBuddy_top
+Family : MAX 10
+Device : 10M50DAF484C7G
+Timing Models : Final
+Total logic elements : 3,550 / 49,760 ( 7 % )
+    Total combinational functions : 3,287 / 49,760 ( 7 % )
+    Dedicated logic registers : 2,023 / 49,760 ( 4 % )
+Total registers : 2023
+Total pins : 185 / 360 ( 51 % )
+Total virtual pins : 0
+Total memory bits : 1,041,664 / 1,677,312 ( 62 % )
+Embedded Multiplier 9-bit elements : 0 / 288 ( 0 % )
+Total PLLs : 0 / 4 ( 0 % )
+UFM blocks : 1 / 1 ( 100 % )
+ADC blocks : 0 / 2 ( 0 % )
